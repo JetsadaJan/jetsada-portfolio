@@ -1,0 +1,622 @@
+
+/* styles/globals.css */
+
+/* Example: ensure Thai text wraps correctly if needed */
+/* html[lang="th"] p,
+html[lang="th"] span,
+html[lang="th"] div {
+  word-break: break-word; /* Or 'break-all' depending on desired behavior for Thai */
+/* } */
+
+/* Add any other global styles or overrides needed for bilingual support */
+
+/* --- DYNAMIC SCROLL SECTION STYLING --- */
+.dynamic-scroll-section {
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* filter 0.4s ease-out; */ /* Filter for blur if used */
+  will-change: opacity, transform; /* filter; */ /* Hint for browser optimization */
+}
+
+
+/* --- GLOBAL ICON ANIMATION HELPERS --- */
+.icon-animate-on-visible {
+  opacity: 0.3; /* MODIFIED: Start with 30% opacity */
+  transform: scale(0.5);
+}
+.animate-card.is-visible .icon-animate-on-visible,
+section.is-visible .icon-animate-on-visible { /* Apply to section direct children too */
+  animation: icon-appear-pop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  animation-delay: 0.6s; /* Delay after card appears */
+}
+@keyframes icon-appear-pop {
+  0% { opacity: 0.3; transform: scale(0.5); } /* MODIFIED: Start from 30% opacity */
+  70% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* New fade-in only animation */
+@keyframes icon-fade-in-only {
+  from { opacity: 0.3; } /* MODIFIED: Start from 30% opacity */
+  to { opacity: 1; }
+}
+
+/* New utility class for fade-in on visible (opacity only) */
+.icon-fade-in-only-on-visible {
+  opacity: 0.3; /* MODIFIED: Start from 30% opacity */
+  /* transform: scale(0.5); -- Removed to prevent scaling */
+}
+.animate-card.is-visible .icon-fade-in-only-on-visible,
+section.is-visible .icon-fade-in-only-on-visible { /* Apply to section direct children too */
+  animation: icon-fade-in-only 0.5s ease-out forwards;
+  animation-delay: 0.6s; /* Consistent delay */
+}
+
+
+/* --- HERO SECTION --- */
+/* Hero Signature SVG */
+.hero-signature-svg path {
+  stroke-dasharray: 250; /* Approximate length, adjust as needed */
+  stroke-dashoffset: 250;
+  animation: draw-signature 2s ease-out 1s forwards; /* Delay to start after page load */
+}
+@keyframes draw-signature {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.hero-signature-svg:hover path {
+  animation: vibrate-signature 0.3s linear infinite alternate;
+}
+@keyframes vibrate-signature {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(0.5px) translateY(-0.5px); }
+  100% { transform: translateX(-0.5px) translateY(0.5px); }
+}
+
+/* Soundwave Animations */
+@keyframes soundwave-startup-sweep {
+  0% { 
+    opacity: 0.2; 
+    transform: scaleY(0.1); /* Start as a slightly thicker very thin signal */
+  }
+  60% { 
+    opacity: 1; 
+    transform: scaleY(1.2); /* Overshoot for a bit of bounce */
+  }
+  100% { 
+    opacity: 0.7; /* Settle to a base opacity */
+    transform: scaleY(0.5); /* Settle to a base scale, matching start of pulse/wiggle */
+  }
+}
+
+/* This mirrors the Tailwind 'soundwave-pulse' for controlled application, now with more randomness */
+@keyframes soundwave-pulse-css {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.7; } /* Baseline for thicker pulse, start and end for smooth alternate */
+  15%      { transform: scaleY(0.9); opacity: 0.9; }
+  30%      { transform: scaleY(0.3); opacity: 0.5; } /* A quick dip */
+  45%      { transform: scaleY(1.2); opacity: 1.0; } /* Peak high */
+  60%      { transform: scaleY(0.7); opacity: 0.8; }
+  75%      { transform: scaleY(1.0); opacity: 0.95;} /* Another smaller peak */
+  /* 100% ensures it returns to the start for the 'alternate' direction */
+}
+
+/* soundwave-hover-wiggle animation removed as it's not used by current SoundwaveIcon.tsx logic */
+
+
+/* --- NAVBAR ICONS --- */
+.navbar-menu-icon:hover path:nth-child(1) { transform: translateY(-1px); }
+.navbar-menu-icon:hover path:nth-child(3) { transform: translateY(1px); }
+
+.navbar-x-icon:hover path {
+  transform-origin: center;
+  animation: x-icon-rotate-hover 0.3s ease-in-out;
+}
+@keyframes x-icon-rotate-hover {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(15deg) scale(1.1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+
+/* --- SKILL CARD ICONS --- */
+/* Ensure icons are visible on hover, especially if hover occurs during the appear animation's delay */
+.skill-card-icon:hover {
+    opacity: 1 !important; 
+}
+
+/* Cog Icon */
+.skill-card-icon.cog-icon:hover {
+  animation: cog-spin-hover 1s linear infinite;
+}
+@keyframes cog-spin-hover {
+  from { transform: rotate(0deg) scale(1.1); opacity: 1; }
+  to { transform: rotate(360deg) scale(1.1); opacity: 1; }
+}
+
+/* Code Icon - simple transform, opacity covered by general hover */
+.skill-card-icon.code-icon:hover {
+  transform: scale(1.15); 
+}
+
+/* Language Icon - paths wiggle, container might scale slightly */
+.skill-card-icon.language-icon:hover {
+    transform: scale(1.1); 
+}
+.skill-card-icon.language-icon:hover path {
+  animation: wiggle-text-lines 0.5s ease-in-out infinite;
+}
+@keyframes wiggle-text-lines { /* This animation doesn't change opacity, so paths remain visible */
+  0%, 100% { transform: skewX(0deg); }
+  25% { transform: skewX(-5deg); }
+  75% { transform: skewX(5deg); }
+}
+
+/* LightBulb Icon */
+.skill-card-icon.lightbulb-icon:hover {
+  animation: lightbulb-glow-hover 0.8s ease-in-out infinite alternate;
+}
+@keyframes lightbulb-glow-hover {
+  from { filter: drop-shadow(0 0 3px currentColor); transform: scale(1.1); opacity: 1;}
+  to { filter: drop-shadow(0 0 8px currentColor); transform: scale(1.15); opacity: 1;}
+}
+
+/* Users Icon - simple transform, opacity covered by general hover */
+.skill-card-icon.users-icon:hover path:first-child { transform: translateX(-1px) scale(1.1); }
+.skill-card-icon.users-icon:hover path:last-child { transform: translateX(1px) scale(1.1); }
+
+/* Chip Icon */
+.skill-card-icon.chip-icon:hover {
+  animation: chip-jiggle-hover 0.3s linear;
+}
+@keyframes chip-jiggle-hover {
+  0%, 100% { transform: rotate(0deg) scale(1.1); opacity: 1; }
+  25% { transform: rotate(-3deg) scale(1.1); opacity: 1; }
+  75% { transform: rotate(3deg) scale(1.1); opacity: 1; }
+}
+
+/* --- EDUCATION CARD ICON --- */
+.animate-card.is-visible .education-cap-icon {
+  animation: cap-bob-visible 1s ease-in-out 0.7s forwards; /* delay after card */
+  transform-origin: bottom center;
+}
+@keyframes cap-bob-visible {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-6px) rotate(-3deg); }
+  75% { transform: translateY(-2px) rotate(2deg); }
+}
+.education-cap-icon-wrapper:hover .education-cap-icon { 
+  animation: cap-tilt-hover 0.6s ease-in-out;
+  transform-origin: bottom center;
+}
+@keyframes cap-tilt-hover {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg) translateY(-4px); }
+  75% { transform: rotate(12deg) translateY(-4px); }
+}
+
+
+/* --- PROJECTS CARD ICON --- */
+/* .project-collection-icon now uses .icon-fade-in-only-on-visible (defined above) */
+.project-collection-icon-wrapper:hover .project-collection-icon {
+  animation: collection-layers-shift 0.5s ease-in-out forwards;
+  opacity: 1 !important; /* Ensure visibility if hovered during initial delay */
+}
+@keyframes collection-layers-shift {
+  0% { transform: scale(1); opacity: 1; }
+  25% { transform: translateX(-1px) translateY(1px) scale(1.05); opacity: 1; }
+  75% { transform: translateX(1px) translateY(-1px) scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; } /* Ensure end state is opacity 1 and base transform */
+}
+
+/* Projects QR Code Button LinkIcon */
+.project-qr-link:hover .project-link-icon {
+  animation: link-stretch-hover 0.4s ease-out;
+}
+@keyframes link-stretch-hover {
+  0%, 100% { transform: scaleX(1) rotate(0); }
+  50% { transform: scaleX(1.1) rotate(5deg); }
+}
+
+
+/* --- GOALS CARD ICONS --- */
+/* .goal-check-icon now uses .icon-fade-in-only-on-visible (defined above) */
+/* .goal-star-icon still uses .icon-animate-on-visible and its special animation */
+
+.goal-icon-wrapper:hover .goal-check-icon,
+.goal-icon-wrapper:hover .goal-star-icon {
+    opacity: 1 !important; /* Ensure visibility if hovered during initial delay */
+}
+
+.goal-icon-wrapper:hover .goal-check-icon {
+  animation: check-circle-pulse-hover 0.6s ease-in-out infinite alternate;
+}
+@keyframes check-circle-pulse-hover {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(1.15); opacity: 1; }
+}
+/* Checkmark draw animation and its keyframes removed as the target SVG path was commented out. */
+
+
+.goal-icon-wrapper:hover .goal-star-icon {
+  animation: star-glow-rotate-hover 0.8s ease-in-out infinite alternate;
+}
+@keyframes star-glow-rotate-hover {
+  from { transform: scale(1.1) rotate(0deg); filter: drop-shadow(0 0 3px currentColor); opacity: 1; }
+  to { transform: scale(1.2) rotate(15deg); filter: drop-shadow(0 0 6px currentColor); opacity: 1; }
+}
+
+/* Star icon's combined appearance animation (pop then twinkle) - REMAINS UNCHANGED */
+.animate-card.is-visible .goal-star-icon {
+  animation: icon-appear-pop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards 0.6s, 
+             star-twinkle-after-pop 1.2s ease-in-out 1.1s infinite alternate; /* Starts after pop: 0.6s delay + 0.5s duration */
+}
+
+@keyframes star-twinkle-after-pop {
+  0% { transform: scale(1) rotate(0deg); opacity: 0.8; } /* Assumes icon-appear-pop finished at scale(1), opacity:1 */
+  50% { transform: scale(1.05) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+}
+
+
+/* --- FOOTER ICONS --- */
+.footer-mail-icon-link:hover .footer-mail-icon {
+  animation: mail-flap-hover 0.4s ease-out;
+}
+@keyframes mail-flap-hover { 
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px) rotateX(10deg); } 
+}
+
+.footer-phone-icon-link:hover .footer-phone-icon {
+  animation: phone-shake-hover 0.3s linear infinite alternate;
+}
+@keyframes phone-shake-hover {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+
+/* --- SECTION TITLE ICON STYLES --- */
+.section-title-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+/* Background icon for section titles */
+.section-title-background-icon-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1; /* Behind the title text */
+  opacity: 0; /* Initially hidden, fades in with section */
+  pointer-events: none; /* Non-interactive */
+}
+section.is-visible .section-title-background-icon-wrapper {
+  animation: section-bg-icon-fade-in 1s ease-out 0.3s forwards; /* Delay slightly after section visibility */
+}
+@keyframes section-bg-icon-fade-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  to { opacity: 0.05; transform: translate(-50%, -50%) scale(1); } /* Very low opacity */
+}
+
+/* Animated User Scan Icon (BACKGROUND SPECIFIC) */
+section.is-visible .section-title-background-icon-wrapper .animated-user-scan-icon .user-scan-body {
+  animation: user-scan-body-pulse 2.5s ease-in-out infinite alternate;
+  animation-delay: 0.8s; /* After fade-in */
+}
+@keyframes user-scan-body-pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* --- NEW: AnimatedBrainLightbulbIcon (BACKGROUND SPECIFIC) --- */
+section.is-visible .section-title-background-icon-wrapper .animated-brain-lightbulb-icon .brain-shape-animated-part {
+  animation: bg-brain-gentle-pulse 4s ease-in-out infinite alternate 1s; /* Starts after section-bg-icon-fade-in */
+  transform-origin: center;
+}
+@keyframes bg-brain-gentle-pulse { /* Opacity relative to 0.05 of wrapper */
+  from { opacity: 0.6; transform: scale(1) translateY(0); }
+  to   { opacity: 1; transform: scale(1.03) translateY(-1px); }
+}
+section.is-visible .section-title-background-icon-wrapper .animated-brain-lightbulb-icon .bulb-main-part {
+  animation: bg-lightbulb-soft-glow 3s ease-in-out infinite alternate 1.2s;
+}
+@keyframes bg-lightbulb-soft-glow {
+  from { fill-opacity: 0.5; filter: drop-shadow(0 0 2px currentColor); }
+  to   { fill-opacity: 0.9; filter: drop-shadow(0 0 5px currentColor); }
+}
+section.is-visible .section-title-background-icon-wrapper .animated-brain-lightbulb-icon .lightbulb-rays line {
+  animation: bg-lightbulb-rays-pulse 3s ease-in-out infinite alternate 1.2s;
+  stroke-opacity: 0;
+}
+@keyframes bg-lightbulb-rays-pulse {
+  0% { stroke-opacity: 0; transform: scaleY(0.5); }
+  50% { stroke-opacity: 0.7; transform: scaleY(1); }
+  100% { stroke-opacity: 0; transform: scaleY(0.5); }
+}
+
+
+/* Animated Quill Pen Icon (About Subtitle) */
+@keyframes quill-base-rotate {
+  0%   { transform: rotate(-2.5deg); } /* Subtle wiggle */
+  100% { transform: rotate(2.5deg); }
+}
+
+@keyframes quill-hover-rotate {
+  0%   { transform: rotate(-4.5deg); } /* More pronounced wiggle */
+  100% { transform: rotate(4.5deg); }
+}
+
+.animated-quill-pen-icon {
+  display: inline-block; /* Ensures transform-origin works as expected */
+  transform-origin: 50% 85%; /* Pivot near the bottom/nib of the quill */
+  animation: quill-base-rotate 3s ease-in-out infinite alternate;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transition for scaling */
+}
+
+/* Hover on the wrapper div for the subtitle */
+.about-subtitle-wrapper:hover .animated-quill-pen-icon {
+  transform: scale(1.20); /* Enlarge the icon */
+  animation-name: quill-hover-rotate; /* Change to the more pronounced wiggle */
+  animation-duration: 1.8s; /* Make the hover wiggle a bit faster/more dynamic */
+}
+
+
+/* On Visible Animations for existing side icons */
+section.is-visible .animated-briefcase-icon .briefcase-body {
+  animation: pulse-briefcase 1.2s ease-in-out infinite alternate;
+  animation-delay: 1.1s; /* after icon-appear-pop */
+}
+@keyframes pulse-briefcase {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+section.is-visible .animated-briefcase-icon .briefcase-handle {
+  animation: jiggle-briefcase-handle 0.7s ease-in-out infinite alternate;
+  animation-delay: 1.1s; /* after icon-appear-pop */
+  transform-origin: top center;
+}
+@keyframes jiggle-briefcase-handle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+section.is-visible .animated-clapperboard-icon .clapper-top {
+  animation: clap-animation 0.8s ease-out forwards;
+  transform-origin: bottom left; 
+  animation-delay: 1.1s; /* after icon-appear-pop */
+}
+@keyframes clap-animation {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  50% { transform: rotate(0deg); } 
+  70% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+section.is-visible .animated-mortarboard-icon .mortarboard-cap {
+  animation: toss-mortarboard 1.2s ease-out forwards;
+  transform-origin: bottom center;
+  animation-delay: 1.1s; /* after icon-appear-pop */
+}
+@keyframes toss-mortarboard {
+  0% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-8px) rotate(-4deg); }
+  40% { transform: translateY(0px) rotate(3deg); }
+  60% { transform: translateY(-4px) rotate(-2deg); }
+  80% { transform: translateY(0px) rotate(1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+section.is-visible .animated-music-notes-icon .music-note-1 {
+  animation: float-note-1 2s ease-in-out infinite alternate;
+  animation-delay: 1.1s; /* after icon-appear-pop */
+  transform-origin: center;
+}
+section.is-visible .animated-music-notes-icon .music-note-2 {
+  animation: float-note-2 2.2s ease-in-out infinite alternate;
+  animation-delay: 1.3s; /* after icon-appear-pop, staggered */
+  transform-origin: center;
+}
+@keyframes float-note-1 {
+  0% { transform: translateY(0px) translateX(0px) rotate(-5deg); opacity: 0.7; }
+  50% { transform: translateY(-6px) translateX(2px) rotate(5deg); opacity: 1; }
+  100% { transform: translateY(0px) translateX(0px) rotate(-5deg); opacity: 0.7; }
+}
+@keyframes float-note-2 {
+  0% { transform: translateY(0px) translateX(0px) rotate(5deg); opacity: 0.6; }
+  50% { transform: translateY(-4px) translateX(-2px) rotate(-5deg); opacity: 0.9; }
+  100% { transform: translateY(0px) translateX(0px) rotate(5deg); opacity: 0.6; }
+}
+
+section.is-visible .animated-target-icon .target-ring-outer {
+  animation: pulse-target-ring 1.5s ease-out infinite;
+  animation-delay: 1.1s; /* after icon-appear-pop */
+  transform-origin: center;
+}
+section.is-visible .animated-target-icon .target-ring-middle {
+  animation: pulse-target-ring 1.5s ease-out infinite;
+  animation-delay: 1.3s; /* after icon-appear-pop, staggered */
+  transform-origin: center;
+}
+section.is-visible .animated-target-icon .target-dot {
+  animation: pulse-target-dot 1.5s ease-out infinite;
+  animation-delay: 1.5s; /* after icon-appear-pop, staggered */
+  transform-origin: center;
+}
+@keyframes pulse-target-ring {
+    0% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.8; transform: scale(1); }
+}
+@keyframes pulse-target-dot {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Hover Animations for Section Title Icons */
+.section-title-icon-wrapper:hover .animated-briefcase-icon .briefcase-body {
+  animation: hover-briefcase-pulse 0.4s ease-out;
+}
+@keyframes hover-briefcase-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.section-title-icon-wrapper:hover .animated-briefcase-icon .briefcase-handle {
+  animation: hover-briefcase-wiggle 0.4s ease-in-out;
+  transform-origin: top center;
+}
+@keyframes hover-briefcase-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.section-title-icon-wrapper:hover .animated-clapperboard-icon .clapper-top {
+  animation: hover-clap-double 0.5s ease-out;
+  transform-origin: bottom left;
+}
+@keyframes hover-clap-double {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-25deg); }
+  40% { transform: rotate(0deg); }
+  60% { transform: rotate(-20deg); }
+  80% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.section-title-icon-wrapper:hover .animated-mortarboard-icon .mortarboard-cap {
+  animation: hover-mortarboard-tilt 0.6s ease-in-out;
+  transform-origin: bottom center;
+}
+@keyframes hover-mortarboard-tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg) translateY(-3px); }
+  75% { transform: rotate(10deg) translateY(-3px); }
+}
+
+.section-title-icon-wrapper:hover .animated-music-notes-icon .music-note-1 {
+  animation: hover-music-note-pulse 0.4s ease-in-out;
+  transform-origin: center;
+}
+.section-title-icon-wrapper:hover .animated-music-notes-icon .music-note-2 {
+  animation: hover-music-note-pulse 0.4s ease-in-out 0.1s;
+  transform-origin: center;
+}
+@keyframes hover-music-note-pulse {
+  0%, 100% { transform: scale(1) translateY(0px); opacity: 1; } /* Ensure opacity is 1 */
+  50% { transform: scale(1.2) translateY(-3px); opacity: 0.8; }
+}
+
+.section-title-icon-wrapper:hover .animated-target-icon .target-dot {
+  animation: hover-target-dot-focus 0.4s ease-out;
+  transform-origin: center;
+}
+@keyframes hover-target-dot-focus {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+.section-title-icon-wrapper:hover .animated-target-icon .target-ring-middle {
+  animation: hover-target-ring-zoom 0.3s ease-out;
+  transform-origin: center;
+}
+.section-title-icon-wrapper:hover .animated-target-icon .target-ring-outer {
+  animation: hover-target-ring-zoom 0.3s ease-out 0.05s;
+  transform-origin: center;
+}
+@keyframes hover-target-ring-zoom {
+  0% { transform: scale(1); opacity: 1; } /* Ensure opacity is 1 */
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* AnimatedUserScanIcon (Side Hover) - Styles for .user-scan-lines path removed */
+.section-title-icon-wrapper:hover .animated-user-scan-icon .user-scan-body path {
+  animation: hover-side-user-scan-body-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes hover-side-user-scan-body-pulse {
+  from { stroke-opacity: 0.7; transform: scale(1); }
+  to { stroke-opacity: 1; transform: scale(1.05); }
+}
+
+/* --- AnimatedBrainLightbulbIcon (SIDE ICON ON-VISIBLE & HOVER) --- */
+
+/* Brain Part - On Visible */
+@keyframes brain-enhanced-subtle-pulse { /* Replaces brain-subtle-pulse-appear */
+  from { opacity: 0.8; transform: scale(1) translateY(0); }
+  to   { opacity: 1; transform: scale(1.04) translateY(-1px); } /* More pronounced */
+}
+.animate-card.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .brain-shape-animated-part,
+section.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .brain-shape-animated-part {
+  animation: brain-enhanced-subtle-pulse 2s ease-in-out infinite alternate 1.1s; /* Starts after pop completes (0.6s delay + 0.5s duration) */
+  transform-origin: center;
+}
+
+/* Lightbulb Main Part - On Visible */
+@keyframes lightbulb-initial-flash-enhanced {
+  0%    { fill-opacity: 0.3; filter: drop-shadow(0 0 1px currentColor); transform: scale(1); }
+  25%   { fill-opacity: 1;   filter: drop-shadow(0 0 6px currentColor); transform: scale(1.1); } /* Bright flash */
+  50%   { fill-opacity: 0.3; filter: drop-shadow(0 0 1px currentColor); transform: scale(0.95); } /* Dim */
+  75%   { fill-opacity: 0.9; filter: drop-shadow(0 0 4px currentColor); transform: scale(1.05); } /* Softer flash */
+  100%  { fill-opacity: 0.5; filter: drop-shadow(0 0 2px currentColor); transform: scale(1); } /* Settle before continuous */
+}
+@keyframes lightbulb-continuous-glow {
+  from { fill-opacity: 0.5; filter: drop-shadow(0 0 2px currentColor); }
+  to   { fill-opacity: 0.7; filter: drop-shadow(0 0 4px currentColor); }
+}
+.animate-card.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .lightbulb-animated-part .bulb-main-part,
+section.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .lightbulb-animated-part .bulb-main-part {
+  animation: 
+    lightbulb-initial-flash-enhanced 1s ease-in-out 1.2s forwards, /* pop (1.1s) + 0.1s stagger */
+    lightbulb-continuous-glow 2.5s ease-in-out 2.2s infinite alternate; /* 1.2s + 1s */
+}
+
+/* Lightbulb Rays - On Visible */
+@keyframes lightbulb-rays-initial-appear-enhanced {
+  0%   { stroke-opacity: 0; transform: scale(0.5); }
+  60%  { stroke-opacity: 0.9; transform: scale(1.15); } /* Expand more */
+  100% { stroke-opacity: 0.7; transform: scale(1); } /* Settle before continuous */
+}
+@keyframes lightbulb-rays-continuous-pulse {
+  from { stroke-opacity: 0.6; transform: scaleY(0.95) scaleX(0.95); }
+  to   { stroke-opacity: 0.8; transform: scaleY(1.05) scaleX(1.05); }
+}
+.animate-card.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .lightbulb-animated-part .lightbulb-rays line,
+section.is-visible .icon-animate-on-visible.animated-brain-lightbulb-icon .lightbulb-animated-part .lightbulb-rays line {
+   animation:
+    lightbulb-rays-initial-appear-enhanced 0.8s ease-out 1.3s forwards, /* pop (1.1s) + 0.2s stagger */
+    lightbulb-rays-continuous-pulse 2.5s ease-in-out 2.1s infinite alternate; /* 1.3s + 0.8s */
+   stroke-opacity: 0; /* Initial state before animation */
+   transform-origin: center center;
+}
+
+
+/* Hover Animations for AnimatedBrainLightbulbIcon (Side Icon - Unchanged from previous state, already good) */
+.section-title-icon-wrapper:hover .animated-brain-lightbulb-icon .brain-shape-animated-part {
+  animation: brain-active-think-hover 1.2s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes brain-active-think-hover {
+  from { opacity: 0.7; transform: scale(1) translateY(0); }
+  to   { opacity: 1; transform: scale(1.08) translateY(-1px); } /* More pronounced pulse */
+}
+.section-title-icon-wrapper:hover .animated-brain-lightbulb-icon .lightbulb-animated-part .bulb-main-part {
+  animation: lightbulb-bright-glow-hover 0.8s ease-in-out infinite alternate;
+}
+@keyframes lightbulb-bright-glow-hover {
+  from { fill-opacity: 0.7; filter: drop-shadow(0 0 3px currentColor); }
+  to   { fill-opacity: 1; filter: drop-shadow(0 0 8px currentColor); } /* Brighter glow */
+}
+.section-title-icon-wrapper:hover .animated-brain-lightbulb-icon .lightbulb-animated-part .lightbulb-rays line {
+  stroke-opacity: 1; /* Ensure rays are visible on hover */
+  animation: lightbulb-rays-strong-hover 0.8s ease-in-out infinite alternate;
+}
+@keyframes lightbulb-rays-strong-hover {
+  from { stroke-opacity: 0.5; transform: scaleY(0.8) scaleX(0.8); }
+  to   { stroke-opacity: 1;  transform: scaleY(1.1) scaleX(1.1); }
+}
